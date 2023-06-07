@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Iu bé Thảo hihi <3</title>
+	</head>
+	<style>
+		div {
+			box-sizing: border-box;
+		}
+		body {
+			box-sizing: border-box;
+			overflow-y: auto;
+			overflow-x: hidden;
+			font-size: 20px;
+			padding: 0px;
+			margin: 0px;
+		}
+		#btn-container {
+			display: flex;
+			justify-content: space-between;
+			position: sticky;
+			bottom: 0px;
+			width: 100vw;
+			padding: 8px;
+		}
+		#input-container {
+			width: 100vw;
+			display: flex;
+			justify-content: center;
+			padding-top: 16px;
+		}
+		#output {
+			width: 100vw;
+			padding: 16px;
+			color: lightslategray;
+		}
+
+		#output > * {
+			transition: all 0.1s;
+		}
+
+		.focus {
+			color: black;
+			/* font-size: 20px; */
+			font-weight: 500;
+			/* background: rgb(230, 230, 230);
+			padding: 4px;
+			border-radius: 4px; */
+		}
+
+		/* CSS */
+		.button-19 {
+			appearance: button;
+			background-color: #1899d6;
+			border: solid transparent;
+			border-radius: 16px;
+			border-width: 0 0 4px;
+			box-sizing: border-box;
+			color: #ffffff;
+			cursor: pointer;
+			display: inline-block;
+			font-family: din-round, sans-serif;
+			font-size: 15px;
+			font-weight: 700;
+			letter-spacing: 0.8px;
+			line-height: 20px;
+			margin: 0;
+			outline: none;
+			overflow: visible;
+			padding: 13px 16px;
+			text-align: center;
+			text-transform: uppercase;
+			touch-action: manipulation;
+			transform: translateZ(0);
+			transition: filter 0.2s;
+			user-select: none;
+			-webkit-user-select: none;
+			vertical-align: middle;
+			white-space: nowrap;
+			width: 50px;
+		}
+
+		.button-19:after {
+			background-clip: padding-box;
+			background-color: #1cb0f6;
+			border: solid transparent;
+			border-radius: 16px;
+			border-width: 0 0 4px;
+			bottom: -4px;
+			content: "";
+			left: 0;
+			position: absolute;
+			right: 0;
+			top: 0;
+			z-index: -1;
+		}
+
+		.button-19:main,
+		.button-19:focus {
+			user-select: auto;
+		}
+
+		.button-19:hover:not(:disabled) {
+			filter: brightness(1.1);
+			-webkit-filter: brightness(1.1);
+		}
+
+		.button-19:disabled {
+			cursor: auto;
+		}
+
+		#file-input {
+			padding: 16px;
+			border: 2px dashed #1cb0f6;
+			border-radius: 16px;
+		}
+	</style>
+	<body>
+		<div id="input-container">
+			<input
+				type="file"
+				accept="text/plain"
+				onchange="openFile(event)"
+				id="file-input" /><br />
+		</div>
+
+		<div id="output"></div>
+		<div id="btn-container">
+			<button class="button-19" onclick="first()"><<</button>
+			<button class="button-19" onclick="previous()"><</button>
+			<button class="button-19" onclick="next()">></button>
+			<button class="button-19" onclick="last()">>></button>
+		</div>
+		<script>
+			let index = 0;
+			let length = 0;
+
+			const openFile = function (event) {
+				let input = event.target;
+
+				let reader = new FileReader();
+				reader.onload = function () {
+					let text = reader.result;
+					let node = document.getElementById("output");
+					let lines = text.split("\n");
+					lines.map((line, index) => {
+						const textNode = document.createElement("p");
+						textNode.innerText = line;
+						textNode.setAttribute(`id`, `text-${index}`);
+						node.appendChild(textNode);
+					});
+
+					length = lines.length;
+
+					let text0 = document.getElementById("text-0");
+					text0.classList.add("focus");
+				};
+				reader.readAsText(input.files[0]);
+			};
+
+			const first = function () {
+				let prevText = document.getElementById(`text-0`);
+				let currentText = document.getElementById(`text-${index}`);
+
+				prevText.classList.add("focus");
+				currentText.classList.remove("focus");
+				prevText.scrollIntoView({
+					behavior: "smooth",
+					block: "center",
+				});
+				index = 0;
+			};
+
+			const previous = function () {
+				let prevText = document.getElementById(`text-${index - 1}`);
+				let currentText = document.getElementById(`text-${index}`);
+
+				prevText.classList.add("focus");
+				currentText.classList.remove("focus");
+				prevText.scrollIntoView({
+					behavior: "smooth",
+					block: "center",
+				});
+				index -= 1;
+			};
+
+			const next = function () {
+				let nextText = document.getElementById(`text-${index + 1}`);
+				let currentText = document.getElementById(`text-${index}`);
+				nextText.classList.add("focus");
+				currentText.classList.remove("focus");
+				nextText.scrollIntoView({
+					behavior: "smooth",
+					block: "center",
+				});
+
+				index += 1;
+			};
+
+			const last = function () {
+				let nextText = document.getElementById(`text-${length - 1}`);
+				let currentText = document.getElementById(`text-${index}`);
+				nextText.classList.add("focus");
+				currentText.classList.remove("focus");
+				nextText.scrollIntoView({
+					behavior: "smooth",
+					block: "center",
+				});
+
+				index = length - 1;
+			};
+		</script>
+	</body>
+</html>
